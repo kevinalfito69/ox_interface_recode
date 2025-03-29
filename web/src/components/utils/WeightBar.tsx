@@ -19,7 +19,7 @@ const COLORS = {
   accentColor: [255, 221, 0], // Neon Yellow
 };
 
-const WeightBar: React.FC<{ percent: number; durability?: boolean }> = ({ percent, durability }) => {
+const WeightBar: React.FC<{ percent: number; durability?: boolean, playerName?:string, inventoryWeight?:string }> = ({ percent, durability, playerName,inventoryWeight }) => {
   const color = useMemo(
     () =>
       durability
@@ -34,16 +34,22 @@ const WeightBar: React.FC<{ percent: number; durability?: boolean }> = ({ percen
 
   return (
     <div className={durability ? 'durability-bar' : 'weight-bar'}>
+      
       <div
         style={{
           visibility: percent > 0 ? 'visible' : 'hidden',
           height: '100%',
+          display:'flex',
+          
           width: `${percent}%`,
           backgroundColor: color,
           transition: `background 0.3s ease, width 0.3s ease`,
-          boxShadow: `0px 0px 15px 5px ${color.replace('rgb', 'rgba').replace(')', ', 0.8)')}`, // Efek glow
+          boxShadow: `0px 0px 15px 5px ${color.replace('rgb', 'rgba').replace(')', ', 0.8)')}`,
         }}
-      ></div>
+      >
+      </div>
+        <p className="player-name">{playerName}</p>
+        <p className="inventory-weight">{inventoryWeight}kg</p>
     </div>
   );
 };

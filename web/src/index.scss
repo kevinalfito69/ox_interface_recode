@@ -4,11 +4,17 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('font/Rajdhani-SemiBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: bold;
+}
 $mainColor: #530442;
 $textColor: #fee801;
 $mainFont: Rajdhani;
 
-$secondaryColor: rgba(51, 2, 40, 0.582);
+$secondaryColor: rgba(41, 4, 33, 0.644);
 $secondaryColorHighlight: #38fbdb;
 $secondaryColorLight: rgba(0, 0, 0, 0.5);
 $secondaryColorDark: rgba(51, 1, 43, 0.8);
@@ -283,9 +289,15 @@ button:active {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  p {
-    font-size: 16px;
-  }
+  .player-name {
+    font-size: 20px;
+    color: #fee801;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 5px #fee801, 0 0 10px #ff00ff, 0 0 20px #00ffff;
+    transition: text-shadow 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
 }
 
 .inventory-grid-container {
@@ -304,13 +316,15 @@ button:active {
   background-position: center;
   image-rendering: -webkit-optimize-contrast;
   position: relative;
-  background-size: 8vh;
+  background-size: 7vh;
+  font-weight: bold;
   color: $textColor;
   border-color: rgba(255, 0, 212, 0.651);
   border-style: inset;
   border-width: 1.5px;
-  clip-path: polygon(15% 0, 100% 0, 100% 84%, 90% 100%, 0 100%, 0 20%);
+  clip-path: polygon(0% 0%, 100% 0, 100% 69%, 82% 100%, 0% 100%);
   &:hover{
+    border: solid #38fbdb 1px;
     background-color: rgba(1, 27, 37, 0.397);
     border-color: $secondaryColorHighlight;
   }
@@ -318,13 +332,10 @@ button:active {
 
 
 .inventory-slot-label-box {
-  
-  color: #71fdff;
+  color: $secondaryColorHighlight;
   text-align: center;
-  border-bottom-left-radius: 0.25vh;
-  border-bottom-right-radius: 0.25vh;
-  
-  
+  background: rgb(0,0,0);
+  background: linear-gradient(0deg, rgba(0,0,0,0.42620798319327735) 0%, rgba(83,4,66,0.35) 100%);
   
 }
 
@@ -334,19 +345,19 @@ button:active {
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 2px 3px;
-  font-weight: 400;
+  font-weight: bold;
+  
   font-family: $mainFont;
   font-size: 10px;
 }
 
 .inventory-slot-number {
-  
-  color: white;
+  color: $secondaryColorHighlight;
   height: 12px;
-  border-top-left-radius: 0.25vh;
+  border:1px solid $secondaryColorHighlight;
   border-bottom-right-radius: 0.25vh;
-  padding: 4px;
-  font-size: 20px;
+  padding: 6px;
+  font-size: 12px;
   font-family: $mainFont;
   right: 0;
 }
@@ -533,13 +544,28 @@ button:active {
   height: 3px;
   overflow: hidden;
 }
-
 .weight-bar {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px inset rgba(0, 0, 0, 0.1);
-  height: 0.8vh;
-  border-radius: 5%;
+  position: relative;
+  background: $secondaryColor;
+  height: 3vh;
   overflow: hidden;
+  .player-name{
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    text-shadow: 0 0 5px #fee801, 0 0 10px #ff00ff, 0 0 20px #00ffff;
+    transform: translateY(-50%);
+    margin: 0;
+    font-weight: bold;
+  }
+  .inventory-weight{
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    
+  }
 }
 
 .transition-fade-enter {
