@@ -178,9 +178,12 @@ function client.openInventory(inv, data)
 
         local targetCoords = targetPed and GetEntityCoords(targetPed)
 
-        if not targetCoords or #(targetCoords - GetEntityCoords(playerPed)) > 1.8 or not (client.hasGroup(shared.police) or canOpenTarget(targetPed)) then
-            return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
-        end
+        -- if not targetCoords or #(targetCoords - GetEntityCoords(playerPed)) > 1.8 or not (client.hasGroup(shared.police) or canOpenTarget(targetPed)) then
+        --     return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
+        -- end
+		if not targetCoords or #(targetCoords - GetEntityCoords(playerPed)) > 1.8 then
+			return lib.notify({ id = 'inventory_right_access', type = 'error', description = locale('inventory_right_access') })
+		end
     end
 
     if inv == 'shop' and invOpen == false then
@@ -707,8 +710,13 @@ local function useButton(id, slot)
 end
 
 local function openNearbyInventory() client.openInventory('player') end
+local function GeledahPlayerTerdekat()
+	client.openInventory('player') 
+end
+
 
 exports('openNearbyInventory', openNearbyInventory)
+exports('GeledahPlayerTerdekat', GeledahPlayerTerdekat)
 
 local currentInstance
 local playerCoords
@@ -1019,10 +1027,9 @@ end)
 ---@param point CPoint
 local function nearbyDrop(point)
 	if not point.instance or point.instance == currentInstance then
-        DrawMarker(client.dropmarker.type, point.coords.x, point.coords.y, point.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, client.dropmarker.scale[1], client.dropmarker.scale[2], client.dropmarker.scale[3],
-        ---@diagnostic disable-next-line: param-type-mismatch
-        client.dropmarker.colour[1], client.dropmarker.colour[2], client.dropmarker.colour[3], 222, false, false, 0, true, false, false, false)
-    end
+		---@diagnostic disable-next-line: param-type-mismatch
+		DrawMarker(2, point.coords.x, point.coords.y, point.coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 150, 30, 30, 222, false, false, 0, true, false, false, false)
+	end
 end
 
 ---@param point CPoint
@@ -1679,71 +1686,120 @@ local function isGiveTargetValid(ped, coords)
     return entity == ped and IsEntityVisible(ped)
 end
 
+-- RegisterNUICallback('giveItem', function(data, cb)
+-- 	cb(1)
+
+--     if usingItem then return end
+
+-- 	if client.giveplayerlist then
+-- 		local nearbyPlayers = lib.getNearbyPlayers(GetEntityCoords(playerPed), 3.0)
+--         local nearbyCount = #nearbyPlayers
+
+-- 		if nearbyCount == 0 then return end
+
+--         if nearbyCount == 1 then
+-- 			local option = nearbyPlayers[1]
+
+--             if not isGiveTargetValid(option.ped, option.coords) then return end
+
+--             return giveItemToTarget(GetPlayerServerId(option.id), data.slot, data.count)
+--         end
+
+--         local giveList, n = {}, 0
+
+-- 		for i = 1, #nearbyPlayers do
+-- 			local option = nearbyPlayers[i]
+
+--             if isGiveTargetValid(option.ped, option.coords) then
+-- 				local playerName = GetPlayerName(option.id)
+-- 				option.id = GetPlayerServerId(option.id)
+--                 ---@diagnostic disable-next-line: inject-field
+-- 				option.label = ('[%s]'):format(option.id)
+-- 				n += 1
+-- 				giveList[n] = option
+-- 			end
+-- 		end
+
+--         if n == 0 then return end
+
+-- 		lib.registerMenu({
+-- 			id = 'ox_inventory:givePlayerList',
+-- 			title = 'Give item',
+-- 			options = giveList,
+-- 		}, function(selected)
+--             giveItemToTarget(giveList[selected].id, data.slot, data.count)
+--         end)
+
+-- 		return lib.showMenu('ox_inventory:givePlayerList')
+-- 	end
+
+--     if cache.vehicle then
+-- 		local seats = GetVehicleMaxNumberOfPassengers(cache.vehicle) - 1
+
+-- 		if seats >= 0 then
+-- 			local passenger = GetPedInVehicleSeat(cache.vehicle, cache.seat - 2 * (cache.seat % 2) + 1)
+
+-- 			if passenger ~= 0 and IsEntityVisible(passenger) then
+--                 return giveItemToTarget(GetPlayerServerId(NetworkGetPlayerIndexFromPed(passenger)), data.slot, data.count)
+-- 			end
+-- 		end
+
+--         return
+-- 	end
+
+--     local entity = Utils.Raycast(1|2|4|8|16, GetOffsetFromEntityInWorldCoords(cache.ped, 0.0, 3.0, 0.5), 0.2)
+
+--     if entity and IsPedAPlayer(entity) and IsEntityVisible(entity) and #(GetEntityCoords(playerPed, true) - GetEntityCoords(entity, true)) < 3.0 then
+--         return giveItemToTarget(GetPlayerServerId(NetworkGetPlayerIndexFromPed(entity)), data.slot, data.count)
+--     end
+-- end)
+
 RegisterNUICallback('giveItem', function(data, cb)
-	cb(1)
+    cb(1)
+	-- local ESX = exports['es_extended']:getSharedObject()
+    local playerPed = PlayerPedId()
+    -- local players, nearbyPlayer = ESX.Game.GetPlayersInArea(GetEntityCoords(playerPed), 3.0)
+	local players, nearbyPlayer = lib.getNearbyPlayers(GetEntityCoords(playerPed), 3.0)   
+    local foundPlayers = false
+    local GiveMenu = {}
 
-    if usingItem then return end
-
-	if client.giveplayerlist then
-		local nearbyPlayers = lib.getNearbyPlayers(GetEntityCoords(playerPed), 3.0)
-        local nearbyCount = #nearbyPlayers
-
-		if nearbyCount == 0 then return end
-
-        if nearbyCount == 1 then
-			local option = nearbyPlayers[1]
-
-            if not isGiveTargetValid(option.ped, option.coords) then return end
-
-            return giveItemToTarget(GetPlayerServerId(option.id), data.slot, data.count)
+    for i = 1, #players, 1 do
+        if players[i] ~= PlayerId() then
+            foundPlayers = true
+            table.insert(GiveMenu,  {
+                title = 'ID : '.. GetPlayerServerId(players[i].id),
+				icon = 'person',
+				onSelect = function()
+					if data.slot == currentWeapon?.slot then
+						currentWeapon = Utils.Disarm(currentWeapon)
+					end
+					TriggerServerEvent('ox_inventory:giveItem', data.slot, GetPlayerServerId(players[i].id), data.count)
+					Utils.PlayAnim(2000, 'mp_common', 'givetake1_a', 1.0, 1.0, -1, 50, 0.0, 0, 0, 0)
+					ClearPedTasks(cache.ped)
+				end
+            })
         end
+    end
+    
 
-        local giveList, n = {}, 0
-
-		for i = 1, #nearbyPlayers do
-			local option = nearbyPlayers[i]
-
-            if isGiveTargetValid(option.ped, option.coords) then
-				local playerName = GetPlayerName(option.id)
-				option.id = GetPlayerServerId(option.id)
-                ---@diagnostic disable-next-line: inject-field
-				option.label = ('[%s] %s'):format(option.id, playerName)
-				n += 1
-				giveList[n] = option
+    if not foundPlayers then
+		lib.notify({ type = 'error', description = 'Tidak ada orang disekitar kamu', icon = 'ban' })
+    else
+		if #players == 1 then
+			if data.slot == currentWeapon?.slot then
+				currentWeapon = Weapon.Disarm(currentWeapon)
 			end
+			Utils.PlayAnim(0, 'mp_common', 'givetake1_a', 1.0, 1.0, 2000, 50, 0.0, 0, 0, 0)
+			TriggerServerEvent('ox_inventory:giveItem', data.slot, GetPlayerServerId(players[1].id), data.count)
+		else
+			lib.registerContext({
+				id = 'give_item',
+				title = 'Orang Disekitar',
+				options = GiveMenu
+			})
+	
+			lib.showContext('give_item')
 		end
-
-        if n == 0 then return end
-
-		lib.registerMenu({
-			id = 'ox_inventory:givePlayerList',
-			title = 'Give item',
-			options = giveList,
-		}, function(selected)
-            giveItemToTarget(giveList[selected].id, data.slot, data.count)
-        end)
-
-		return lib.showMenu('ox_inventory:givePlayerList')
-	end
-
-    if cache.vehicle then
-		local seats = GetVehicleMaxNumberOfPassengers(cache.vehicle) - 1
-
-		if seats >= 0 then
-			local passenger = GetPedInVehicleSeat(cache.vehicle, cache.seat - 2 * (cache.seat % 2) + 1)
-
-			if passenger ~= 0 and IsEntityVisible(passenger) then
-                return giveItemToTarget(GetPlayerServerId(NetworkGetPlayerIndexFromPed(passenger)), data.slot, data.count)
-			end
-		end
-
-        return
-	end
-
-    local entity = Utils.Raycast(1|2|4|8|16, GetOffsetFromEntityInWorldCoords(cache.ped, 0.0, 3.0, 0.5), 0.2)
-
-    if entity and IsPedAPlayer(entity) and IsEntityVisible(entity) and #(GetEntityCoords(playerPed, true) - GetEntityCoords(entity, true)) < 3.0 then
-        return giveItemToTarget(GetPlayerServerId(NetworkGetPlayerIndexFromPed(entity)), data.slot, data.count)
     end
 end)
 
@@ -1759,20 +1815,23 @@ end)
 
 lib.callback.register('ox_inventory:startCrafting', function(id, recipe)
 	recipe = CraftingBenches[id].items[recipe]
-
-	return lib.progressCircle({
-		label = locale('crafting_item', recipe.metadata?.label or Items[recipe.name].label),
+	local label = (recipe.metada and recipe.metadata.label) or (Items[recipe.name] and Items[recipe.name].label)
+	local progressConfig = {
+		label = locale('crafting_item', label),
 		duration = recipe.duration or 3000,
-		canCancel = true,
-		disable = {
-			move = true,
-			combat = true,
-		},
-		anim = {
-			dict = 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@',
-			clip = 'machinic_loop_mechandplayer',
-		}
-	})
+		canCancel = false,
+		disable = { move = true, combat = true }
+	}
+
+	if recipe.anim == 'masak' then
+		TriggerEvent('InteractSound_CL:PlayOnOne', 'memasak', 0.5)
+		progressConfig.label = locale('memasak', label)
+		progressConfig.anim = { dict = "amb@prop_human_bbq@male@idle_a", clip = "idle_b", flag = 49 }
+        progressConfig.prop = { model = "prop_fish_slice_01", bone = 28422, pos = vec3(0.0, 0.0, 0.0), rot = vec3(0.0, 0.0, 0.0) }
+	else
+		progressConfig.anim = { dict = 'anim@amb@clubhouse@tutorial@bkr_tut_ig3@', clip = 'machinic_loop_mechandplayer' }
+	end
+	return lib.progressCircle(progressConfig)
 end)
 
 local swapActive = false
@@ -1904,3 +1963,29 @@ lib.callback.register('ox_inventory:getVehicleData', function(netid)
 		return GetEntityModel(entity), GetVehicleClass(entity)
 	end
 end)
+
+-- local function HasItem(itemName, itemAmount)
+--     local count = exports.ox_inventory:Search('count', itemName)
+--     if count >= itemAmount then
+--         return true
+--     end
+    
+--     return false
+-- end
+
+-- exports('HasItem', HasItem)
+
+local function HasItem(itemName, itemAmount)
+    if itemName and itemAmount then
+        local count = exports.ox_inventory:Search('count', itemName:lower())
+        if type(count) == 'table' then
+            local newCount = count[itemName:upper()]
+            if newCount >= itemAmount then return true end
+        else
+            if count >= itemAmount then return true end
+        end
+    end
+    
+    return false
+end
+exports('HasItem', HasItem)

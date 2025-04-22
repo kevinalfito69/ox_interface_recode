@@ -8,7 +8,7 @@ import App from './App';
 import './index.scss';
 import { ItemNotificationsProvider } from './components/utils/ItemNotifications';
 import { isEnvBrowser } from './utils/misc';
-
+import 'animate.css';
 const root = document.getElementById('root');
 
 if (isEnvBrowser()) {

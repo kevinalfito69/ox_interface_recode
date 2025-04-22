@@ -14,16 +14,16 @@ const colorMixer = (rgbA: number[], rgbB: number[], amountToMix: number) => {
 };
 
 const COLORS = {
-  primaryColor: [255, 0, 102], // Neon Pink
-  secondColor: [0, 255, 204], // Neon Cyan
-  accentColor: [255, 221, 0], // Neon Yellow
+  primaryColor: [255,32,86], // Neon Pink
+  secondColor: [0,201,81], // Neon Cyan
+  accentColor: [253,199,0], // Neon Yellow
 };
 
 const WeightBar: React.FC<{ percent: number; durability?: boolean, playerName?:string, inventoryWeight?:string }> = ({ percent, durability, playerName,inventoryWeight }) => {
   const color = useMemo(
     () =>
       durability
-        ? percent < 50
+        ? percent < 50    
           ? colorMixer(COLORS.accentColor, COLORS.primaryColor, percent / 100)
           : colorMixer(COLORS.secondColor, COLORS.accentColor, percent / 100)
         : percent > 50
@@ -33,6 +33,7 @@ const WeightBar: React.FC<{ percent: number; durability?: boolean, playerName?:s
   );
 
   return (
+    <>
     <div className={durability ? 'durability-bar' : 'weight-bar'}>
       
       <div
@@ -48,9 +49,10 @@ const WeightBar: React.FC<{ percent: number; durability?: boolean, playerName?:s
         }}
       >
       </div>
-        <p className="player-name">{playerName}</p>
-        <p className="inventory-weight">{inventoryWeight}kg</p>
+      <p className="player-name">{playerName}</p>
+      <p className="inventory-weight">{inventoryWeight}kg</p>
     </div>
+    </>
   );
 };
 export default WeightBar;

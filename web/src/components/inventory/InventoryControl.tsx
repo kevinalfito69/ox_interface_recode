@@ -40,9 +40,11 @@ const InventoryControl: React.FC = () => {
       <UsefulControls infoVisible={infoVisible} setInfoVisible={setInfoVisible} />
       <div className="inventory-control">
         <div className="inventory-control-wrapper">
+          <label htmlFor="jumlah">Jumlah</label>
           <input
             className="inventory-control-input"
             type="number"
+            id='jumlah'
             defaultValue={itemAmount}
             onChange={inputHandler}
             min={0}
@@ -50,10 +52,10 @@ const InventoryControl: React.FC = () => {
           <button className="inventory-control-button" ref={use}>
             {Locale.ui_use || 'Use'}
           </button>
-          <button className="inventory-control-button" ref={give}>
+          <button className="inventory-control-give" ref={give}>
             {Locale.ui_give || 'Give'}
           </button>
-          <button className="inventory-control-button" onClick={() => fetchNui('exit')}>
+          <button className="inventory-control-close" onClick={() => fetchNui('exit')}>
             {Locale.ui_close || 'Close'}
           </button>
         </div>

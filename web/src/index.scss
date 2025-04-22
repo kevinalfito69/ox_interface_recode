@@ -1,33 +1,22 @@
-@font-face {
-  font-family: 'Rajdhani';
-  src: url('font/Rajdhani-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Rajdhani';
-  src: url('font/Rajdhani-SemiBold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: bold;
-}
-$mainColor: #530442;
-$textColor: #fee801;
-$mainFont: Rajdhani;
 
-$secondaryColor: rgba(41, 4, 33, 0.644);
-$secondaryColorHighlight: #38fbdb;
+$mainColor: #9506a8;
+$textColor: #ffd970;
+$mainFont: Saira;
+
+$secondaryColor: rgba(61, 0, 56, 0.568);
+$secondaryColorHighlight: #fbde38;
 $secondaryColorLight: rgba(0, 0, 0, 0.5);
 $secondaryColorDark: rgba(51, 1, 43, 0.8);
 
 $gridCols: 5;
 $gridRows: 5;
 $gridSize: 10.2vh;
-$gridGap: 2px;
+$gridGap: 4px;
 $containerSize: calc( #{$gridRows} * #{$gridSize + 0.22vh} + #{$gridRows} * #{$gridGap});
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Saira', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -70,7 +59,7 @@ input[type='number']::-webkit-outer-spin-button {
 
 .context-menu-list {
   min-width: 200px;
-  background-color: rgba(2, 51, 70, 0.397);
+  background-color: #2b004485;
     color: $textColor;
   padding: 4px;
   border-color: $secondaryColorHighlight;
@@ -137,8 +126,6 @@ button:active {
   justify-content: center;
   align-items: center;
   height: 100%;
-  background: rgb(0,0,0);
-  background: linear-gradient(0deg, rgba(0,0,0,0.42620798319327735) 0%, rgba(83,4,66,0.35) 58%, rgba(247,229,6,0.3533788515406162) 100%);
   gap: 20px;
 }
 
@@ -163,9 +150,19 @@ button:active {
     outline: none;
     border: none;
     color: #fff;
+    border:1px solid $mainColor;
+    border-radius: 10px;
     background-color: $secondaryColor;
+    
+    // &:focus-within {
+    //   background-color: $secondaryColorDark;
+    // }
     &:focus-within {
-      background-color: $secondaryColorDark;
+      background-color: #2b004485;
+      border: solid $secondaryColorHighlight 1px;
+      color: $secondaryColorHighlight;
+      box-shadow: 0 0 10px $secondaryColorHighlight, 0 0 20px #ffea32; 
+      font-weight: bold;
     }
   }
 
@@ -184,12 +181,59 @@ button:active {
     
     
     &:hover {
-      background-color: #02272162;
-      border: solid #38fbdb 1px;
+      background-color: #42380085;
+      border: solid $secondaryColorHighlight 1px;
       color: $secondaryColorHighlight;
-      box-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff; 
+      box-shadow: 0 0 10px #eeff00, 0 0 20px #ff00ff; 
       font-weight: bold;
     }
+  }
+}
+
+.inventory-control-close {
+  font-size: 14px;
+  color: #fff;
+  background-color: $secondaryColor;
+  transition: 200ms;
+  padding: 12px 8px;
+  border-radius: 2.5%;
+  border: none;
+  text-transform: uppercase;
+  font-family: $mainFont;
+  width: 70%;
+  font-weight: 500;
+  
+  
+  &:hover {
+    background-color: #4e00009d;
+    border: solid #fb3838 1px;
+    color: #ff6e6e;
+    box-shadow: 0 0 10px #ff0000, 0 0 20px #ffb2b2; 
+    font-weight: bold;
+  }
+}
+
+
+.inventory-control-give {
+  font-size: 14px;
+  color: #fff;
+  background-color: $secondaryColor;
+  transition: 200ms;
+  padding: 12px 8px;
+  border-radius: 2.5%;
+  border: none;
+  text-transform: uppercase;
+  font-family: $mainFont;
+  width: 70%;
+  font-weight: 500;
+  
+  
+  &:hover {
+    background-color: #155a0062;
+    border: solid #38fb99 1px;
+    color: #6effbb;
+    box-shadow: 0 0 10px #00ff88, 0 0 20px #b2ffe8; 
+    font-weight: bold;
   }
 }
 
@@ -303,10 +347,12 @@ button:active {
 .inventory-grid-container {
   display: grid;
   height: $containerSize;
-  grid-template-columns: repeat($gridCols, $gridSize * 1.7);
+  grid-template-columns: repeat($gridCols, $gridSize * 1);
   grid-auto-rows: $gridSize + 0.22vh;
   gap: $gridGap;
   overflow-y: scroll;
+  scrollbar-color: $secondaryColorHighlight #2b004485 ;
+  scrollbar-width: thin;
 }
 
 // inventory slots
@@ -316,17 +362,18 @@ button:active {
   background-position: center;
   image-rendering: -webkit-optimize-contrast;
   position: relative;
-  background-size: 7vh;
-  font-weight: bold;
+  background-size: 6vh;
   color: $textColor;
   border-color: rgba(255, 0, 212, 0.651);
   border-style: inset;
   border-width: 1.5px;
-  clip-path: polygon(0% 0%, 100% 0, 100% 69%, 82% 100%, 0% 100%);
-  &:hover{
-    border: solid #38fbdb 1px;
-    background-color: rgba(1, 27, 37, 0.397);
-    border-color: $secondaryColorHighlight;
+  border-radius: 20px 0 20px 0 ;
+  &:hover{      
+      background-color: #2b004485;
+      border: solid $secondaryColorHighlight 1px;
+      color: $secondaryColorHighlight;
+      box-shadow:  0 1px $secondaryColorHighlight, 0 0 8px #ffea32 ;
+      font-weight: bold;
   }
 }
 
@@ -334,8 +381,9 @@ button:active {
 .inventory-slot-label-box {
   color: $secondaryColorHighlight;
   text-align: center;
+  border-radius: 10px 0 10px 0 ;
   background: rgb(0,0,0);
-  background: linear-gradient(0deg, rgba(0,0,0,0.42620798319327735) 0%, rgba(83,4,66,0.35) 100%);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.774) 0%, rgba(124, 1, 97, 0.473) 100%);
   
 }
 
@@ -345,10 +393,10 @@ button:active {
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 2px 3px;
-  font-weight: bold;
+  font-weight: 400;
   
   font-family: $mainFont;
-  font-size: 10px;
+  font-size: 8pt;
 }
 
 .inventory-slot-number {
@@ -356,8 +404,10 @@ button:active {
   height: 12px;
   border:1px solid $secondaryColorHighlight;
   border-bottom-right-radius: 0.25vh;
-  padding: 6px;
-  font-size: 12px;
+  padding: 10px;
+  border-radius: 20px 0 20px 0; 
+  font-size: 8pt ;
+  font-weight: bold;
   font-family: $mainFont;
   right: 0;
 }
@@ -417,11 +467,38 @@ button:active {
   }
 }
 
+.nearby-box {
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background-color: rgba(12, 12, 12, 0.35);
+   border: 0.1vh solid rgba(0, 0, 0, 0.1);
+   border-radius: 20px;
+   padding: 0.9vh;
+   width: 7.5vw;
+   min-height: 10vh;
+   display: grid;
+   grid-template-columns: auto auto auto;
+ 
+   .player-id {
+     height: fit-content;
+     text-align: center;
+     background-color: $mainColor;
+     opacity: 0.8;
+ 
+     &:hover {
+       background-color: $secondaryColor;
+       opacity: 0.8;
+     }
+   }
+ }
+ 
 
 .tooltip-wrapper {
   pointer-events: none;
   display: flex;
-  background-color: rgba(1, 27, 37, 0.397);
+  background-color: #3f006449;
   width: 200px;
   padding: 8px;
   flex-direction: column;
@@ -432,6 +509,7 @@ button:active {
   border-color: $secondaryColorHighlight;
   border-style: inset;
   border-width: 1px;
+  box-shadow:  2px 2px $secondaryColorHighlight;;
   p {
     
     font-size: 12px;
@@ -547,13 +625,14 @@ button:active {
 .weight-bar {
   position: relative;
   background: $secondaryColor;
-  height: 3vh;
+  height: 2.5vh;
+  
   overflow: hidden;
   .player-name{
     position: absolute;
     left: 5px;
     top: 50%;
-    text-shadow: 0 0 5px #fee801, 0 0 10px #ff00ff, 0 0 20px #00ffff;
+    
     transform: translateY(-50%);
     margin: 0;
     font-weight: bold;

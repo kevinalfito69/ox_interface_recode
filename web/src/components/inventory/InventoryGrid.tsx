@@ -26,7 +26,13 @@ const InventoryGrid: React.FC<{ inventory: Inventory }> = ({ inventory }) => {
   return (
     <>
       <div className="inventory-grid-wrapper" style={{ pointerEvents: isBusy ? 'none' : 'auto' }}>
-        
+      <div>
+        {inventory.maxWeight && (
+            <WeightBar percent={inventory.maxWeight ? (weight / inventory.maxWeight) * 100 : 0} playerName={inventory.label} inventoryWeight={`${weight / 1000}/${inventory.maxWeight / 1000}`} />
+            )}
+          
+
+        </div>
         <div className="inventory-grid-container" ref={containerRef}>
           <>
             {inventory.items.slice(0, (page + 1) * PAGE_SIZE).map((item, index) => (
@@ -41,13 +47,7 @@ const InventoryGrid: React.FC<{ inventory: Inventory }> = ({ inventory }) => {
             ))}
           </>
         </div>
-        <div>
-        {inventory.maxWeight && (
-            <WeightBar percent={inventory.maxWeight ? (weight / inventory.maxWeight) * 100 : 0} playerName={inventory.label} inventoryWeight={`${weight / 1000}/${inventory.maxWeight / 1000}`} />
-            )}
-          
-
-        </div>
+ 
       </div>
     </>
   );
